@@ -1,0 +1,57 @@
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(10px);
+}
+
+.sectionTitle {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+.tooltip {
+  background: rgba(255, 252, 246, 0.98);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 0.75rem 0.9rem;
+  font-size: 0.82rem;
+  font-family: var(--font-sans);
+  box-shadow: var(--shadow-sm);
+}
+
+.tooltipLabel {
+  color: var(--text-soft);
+  margin-bottom: 0.35rem;
+  font-weight: 600;
+}
+
+.tooltipRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text);
+  margin-top: 0.2rem;
+}
+
+.tooltipDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}

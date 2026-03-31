@@ -1,0 +1,62 @@
+.app {
+  min-height: 100vh;
+  background: var(--bg);
+  padding: 0 0 3rem;
+}
+
+.container {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+
+.errorBanner {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  background: rgba(255, 252, 246, 0.9);
+  border: 1px solid rgba(177, 95, 90, 0.22);
+  border-radius: var(--radius-sm);
+  padding: 0.95rem 1rem;
+  font-size: 0.95rem;
+  color: var(--text-soft);
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+  box-shadow: var(--shadow-sm);
+}
+
+.errorIcon {
+  width: 1.4rem;
+  height: 1.4rem;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+  background: rgba(177, 95, 90, 0.12);
+  color: var(--danger);
+}
+
+.loadingState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6rem 2rem;
+  gap: 1rem;
+  color: var(--text-soft);
+  font-size: 0.95rem;
+}
+
+.spinner {
+  width: 2.1rem;
+  height: 2.1rem;
+  border: 3px solid rgba(162, 111, 57, 0.16);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.75s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }

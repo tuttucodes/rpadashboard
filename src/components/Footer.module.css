@@ -1,0 +1,15 @@
+.footer {
+  text-align: center;
+  padding: 2rem 0 0;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-family: var(--font-mono);
+}
+
+.dot { color: rgba(92, 75, 58, 0.35); }

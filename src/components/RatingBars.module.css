@@ -1,0 +1,81 @@
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(10px);
+}
+
+.sectionTitle {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  margin-bottom: 1.25rem;
+}
+
+.bars { display: flex; flex-direction: column; gap: 16px; }
+
+.row {
+  opacity: 0;
+  animation: fadeUp 0.4s ease forwards;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.labelWrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 7px;
+}
+
+.label {
+  font-size: 0.96rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.valBadge {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.max {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.track {
+  position: relative;
+  height: 10px;
+  background: rgba(92, 75, 58, 0.08);
+  border-radius: 999px;
+  overflow: visible;
+}
+
+.fill {
+  position: absolute;
+  top: 0; left: 0;
+  height: 100%;
+  border-radius: 4px;
+  transition: width 1s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.tick {
+  position: absolute;
+  top: -2px;
+  width: 1px;
+  height: 14px;
+  background: rgba(92, 75, 58, 0.12);
+  transform: translateX(-50%);
+  z-index: 1;
+}
