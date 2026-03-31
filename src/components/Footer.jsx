@@ -7,7 +7,7 @@ export default function Footer() {
       <span className={styles.dot}>•</span>
       <span>Dr Umesh K</span>
       <span className={styles.dot}>•</span>
-      <span>VIT Vellore</span>
+      <span>VIT Chennai</span>
     </footer>
   )
 }

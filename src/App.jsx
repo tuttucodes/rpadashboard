@@ -100,7 +100,6 @@ export default function App() {
           loading={loading}
           refreshing={refreshing}
           lastUpdated={lastUpdated}
-          autoRefreshMs={AUTO_REFRESH_MS}
           hasError={Boolean(error)}
           staleData={staleData}
         />
@@ -128,7 +127,7 @@ export default function App() {
             <StatCards data={data} usingFallback={usingFallback} />
             <RatingBars ratings={data.ratings} />
             <ChartsRow data={data} />
-            <QualitativeSection students={data.students} />
+            <QualitativeSection students={data.students} insights={data.qualitativeInsights} />
             <RespondentTable students={data.students} />
           </>
         ) : null}

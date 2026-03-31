@@ -1,4 +1,5 @@
 import Papa from 'papaparse'
+import { buildQualitativeInsights } from './qualitativeInsights'
 
 export const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRGT5Vgo1O48TlJE5xJgr1rv0OIdTdUtzTz1VWzf1AeD7L9qr_0bStrHLS7NBfbmWPMDHjZ5NSrmo1s/pub?gid=1133882812&single=true&output=csv'
 export const DASHBOARD_CACHE_KEY = 'rpa-dashboard-live-cache'
@@ -103,7 +104,9 @@ export function processData(rows) {
     return entry
   })
 
-  return { ratings, overallAvg, students, radarData }
+  const qualitativeInsights = buildQualitativeInsights(students)
+
+  return { ratings, overallAvg, students, radarData, qualitativeInsights }
 }
 
 export const FALLBACK_ROWS = [

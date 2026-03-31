@@ -9,8 +9,7 @@ function formatTime(date) {
     : '—'
 }
 
-export default function Header({ onRefresh, loading, refreshing, lastUpdated, autoRefreshMs, hasError, staleData }) {
-  const autoRefreshSeconds = Math.round(autoRefreshMs / 1000)
+export default function Header({ onRefresh, loading, refreshing, lastUpdated, hasError, staleData }) {
   const statusLabel = loading
     ? 'Loading live data'
     : refreshing
@@ -24,10 +23,11 @@ export default function Header({ onRefresh, loading, refreshing, lastUpdated, au
       <div className={styles.hero}>
         <div className={styles.copy}>
           <p className={styles.eyebrow}>RPA Course Feedback</p>
-          <h1 className={styles.title}>A calmer view of what students are saying.</h1>
-          <p className={styles.subtitle}>
-            Live course feedback from Google Sheets, refreshed automatically and kept on screen even when the source is temporarily unavailable.
-          </p>
+          <h1 className={styles.title}>Project by Rohan, Dhaanya & Rahul</h1>
+          <div className={styles.metaText}>
+            <span>Under faculty Dr Umesh K</span>
+            <span>VIT Chennai</span>
+          </div>
         </div>
         <div className={styles.panel}>
           <div className={styles.statusRow}>
@@ -44,9 +44,8 @@ export default function Header({ onRefresh, loading, refreshing, lastUpdated, au
           </div>
           <div className={styles.rule} />
           <div className={styles.chips}>
-            <span className={styles.chip}>Auto refresh every {autoRefreshSeconds}s</span>
-            <span className={styles.chip}>Faculty: Dr Umesh K</span>
-            <span className={styles.chip}>Course: Robot Process Automation</span>
+            <span className={styles.chip}>Robot Process Automation</span>
+            <span className={styles.chip}>Google Forms dashboard</span>
           </div>
         </div>
       </div>
