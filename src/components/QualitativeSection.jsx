@@ -2,18 +2,6 @@ import { useState } from 'react'
 import styles from './QualitativeSection.module.css'
 import { QUALITATIVE_THEME_LABELS } from '../qualitativeInsights'
 
-const TABS = [
-  { key: 'difficulty', label: 'Difficulties', accent: '#E24B4A' },
-  { key: 'improvement', label: 'Improvements', accent: '#0ABFBC' },
-  { key: 'impression', label: 'Impressions', accent: '#FF6B35' },
-  { key: 'concerns', label: 'Concerns', accent: '#BA7517' },
-  { key: 'helpers', label: 'Would Help', accent: '#3B6D11' },
-]
-
-function isEmpty(val) {
-  return !val || val.toLowerCase() === 'no' || val.trim() === ''
-}
-
 const SENTIMENT_FILTERS = [
   { key: 'all', label: 'All' },
   { key: 'negative', label: 'Negative' },
@@ -27,15 +15,9 @@ const SENTIMENT_STYLES = {
   negative: { color: 'var(--danger)', background: 'rgba(177,95,90,0.12)' },
 }
 
-export default function QualitativeSection({ students, insights }) {
-  const [active, setActive] = useState('difficulty')
+export default function QualitativeSection({ insights }) {
   const [themeFilter, setThemeFilter] = useState('all')
   const [sentimentFilter, setSentimentFilter] = useState('all')
-  const tab = TABS.find(t => t.key === active)
-
-  const items = students
-    .map(s => ({ name: s.name, reg: s.reg, text: s[active] }))
-    .filter(i => !isEmpty(i.text))
 
   const filteredResponses = insights.responses.filter((response) => {
     const matchesTheme = themeFilter === 'all' || response.themes.includes(themeFilter)
@@ -132,38 +114,6 @@ export default function QualitativeSection({ students, insights }) {
         </div>
       </div>
 
-      <div className={styles.divider} />
-      <div className={styles.sectionTitle}>Responses by question</div>
-      <div className={styles.tabs}>
-        {TABS.map(t => (
-          <button
-            key={t.key}
-            className={`${styles.tab} ${active === t.key ? styles.tabActive : ''}`}
-            style={active === t.key ? { borderColor: t.accent, color: t.accent } : {}}
-            onClick={() => setActive(t.key)}
-          >
-            {t.label}
-          </button>
-        ))}
-      </div>
-
-      <div className={styles.list}>
-        {items.length === 0 ? (
-          <p className={styles.empty}>No responses for this category.</p>
-        ) : (
-          items.map((item, i) => (
-            <div key={i} className={styles.responseCard} style={{ borderLeftColor: tab.accent }}>
-              <p className={styles.responseText}>{item.text}</p>
-              <div className={styles.responseMeta}>
-                <span>{item.name}</span>
-                {item.reg && item.reg !== '—' && (
-                  <span className={styles.reg}>{item.reg}</span>
-                )}
-              </div>
-            </div>
-          ))
-        )}
-      </div>
     </div>
   )
 }

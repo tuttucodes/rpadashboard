@@ -22,8 +22,8 @@ export default function Header({ onRefresh, loading, refreshing, lastUpdated, ha
     <header className={styles.header}>
       <div className={styles.hero}>
         <div className={styles.copy}>
-          <p className={styles.eyebrow}>RPA Course Feedback</p>
-          <h1 className={styles.title}>Project by Rohan, Dhaanya & Rahul</h1>
+          <p className={styles.eyebrow}>Project by Rohan, Dhaanya & Rahul</p>
+          <h1 className={styles.title}>RPA Course Feedback</h1>
           <div className={styles.metaText}>
             <span>Under faculty Dr Umesh K</span>
             <span>VIT Chennai</span>
