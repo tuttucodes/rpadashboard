@@ -152,3 +152,32 @@ export function buildQualitativeInsights(students) {
     positiveResponses: responses.filter((response) => response.sentiment === 'positive'),
   }
 }
+
+export function getFilteredResponses(responses, { themeFilter = 'all', sentimentFilter = 'all' } = {}) {
+  return responses.filter((response) => {
+    const matchesTheme = themeFilter === 'all' || response.themes.includes(themeFilter)
+    const matchesSentiment = sentimentFilter === 'all' || response.sentiment === sentimentFilter
+    return matchesTheme && matchesSentiment
+  })
+}
+
+export function getThemeSummary(responses) {
+  const themeCounts = {}
+
+  responses.forEach((response) => {
+    response.themes.forEach((theme) => {
+      themeCounts[theme] = (themeCounts[theme] || 0) + 1
+    })
+  })
+
+  return Object.entries(themeCounts)
+    .sort((a, b) => {
+      if (b[1] !== a[1]) return b[1] - a[1]
+      return QUALITATIVE_THEME_LABELS[a[0]].localeCompare(QUALITATIVE_THEME_LABELS[b[0]])
+    })
+    .map(([key, count]) => ({
+      key,
+      label: QUALITATIVE_THEME_LABELS[key],
+      count,
+    }))
+}

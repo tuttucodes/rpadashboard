@@ -1,6 +1,10 @@
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import styles from './QualitativeSection.module.css'
-import { QUALITATIVE_THEME_LABELS } from '../qualitativeInsights'
+import {
+  QUALITATIVE_THEME_LABELS,
+  getFilteredResponses,
+  getThemeSummary,
+} from '../qualitativeInsights'
 
 const SENTIMENT_FILTERS = [
   { key: 'all', label: 'All' },
@@ -19,11 +23,29 @@ export default function QualitativeSection({ insights }) {
   const [themeFilter, setThemeFilter] = useState('all')
   const [sentimentFilter, setSentimentFilter] = useState('all')
 
-  const filteredResponses = insights.responses.filter((response) => {
-    const matchesTheme = themeFilter === 'all' || response.themes.includes(themeFilter)
-    const matchesSentiment = sentimentFilter === 'all' || response.sentiment === sentimentFilter
-    return matchesTheme && matchesSentiment
-  })
+  const sentimentScopedResponses = useMemo(
+    () => getFilteredResponses(insights.responses, { sentimentFilter }),
+    [insights.responses, sentimentFilter],
+  )
+
+  const visibleThemes = useMemo(
+    () => getThemeSummary(sentimentScopedResponses),
+    [sentimentScopedResponses],
+  )
+
+  useEffect(() => {
+    if (themeFilter === 'all') return
+
+    const themeStillVisible = visibleThemes.some((theme) => theme.key === themeFilter)
+    if (!themeStillVisible) {
+      setThemeFilter('all')
+    }
+  }, [themeFilter, visibleThemes])
+
+  const filteredResponses = useMemo(
+    () => getFilteredResponses(sentimentScopedResponses, { themeFilter }),
+    [sentimentScopedResponses, themeFilter],
+  )
 
   return (
     <div className={styles.card}>
@@ -48,12 +70,22 @@ export default function QualitativeSection({ insights }) {
         <div className={styles.panelHead}>
           <div>
             <h3 className={styles.panelTitle}>Theme signals</h3>
-            <p className={styles.panelText}>Rule-based analysis of text responses from the form.</p>
+            <p className={styles.panelText}>
+              Theme counts now follow the active sentiment view so the chips and cards stay aligned.
+            </p>
           </div>
         </div>
 
         <div className={styles.themeList}>
-          {insights.topThemes.map((theme) => (
+          <button
+            className={`${styles.themeChip} ${themeFilter === 'all' ? styles.themeChipActive : ''}`}
+            onClick={() => setThemeFilter('all')}
+          >
+            <span>All themes</span>
+            <span className={styles.themeCount}>{sentimentScopedResponses.length}</span>
+          </button>
+
+          {visibleThemes.map((theme) => (
             <button
               key={theme.key}
               className={`${styles.themeChip} ${themeFilter === theme.key ? styles.themeChipActive : ''}`}

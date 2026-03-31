@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest'
 import {
   analyzeResponse,
   buildQualitativeInsights,
+  getFilteredResponses,
+  getThemeSummary,
   QUALITATIVE_THEME_LABELS,
 } from './qualitativeInsights'
 
@@ -68,5 +70,43 @@ describe('buildQualitativeInsights', () => {
     })
     expect(result.negativeResponses).toHaveLength(1)
     expect(result.positiveResponses).toHaveLength(1)
+  })
+})
+
+describe('insight filtering helpers', () => {
+  const insights = {
+    responses: [
+      { sentiment: 'positive', themes: ['practice', 'positive_experience'] },
+      { sentiment: 'positive', themes: ['examples'] },
+      { sentiment: 'negative', themes: ['practice', 'pace'] },
+    ],
+  }
+
+  it('limits visible themes to the active sentiment filter', () => {
+    const filteredResponses = getFilteredResponses(insights.responses, {
+      themeFilter: 'all',
+      sentimentFilter: 'positive',
+    })
+
+    expect(filteredResponses).toHaveLength(2)
+    expect(getThemeSummary(filteredResponses)[0]).toEqual({
+      key: 'examples',
+      label: QUALITATIVE_THEME_LABELS.examples,
+      count: 1,
+    })
+    expect(getThemeSummary(filteredResponses)).toContainEqual({
+      key: 'practice',
+      label: QUALITATIVE_THEME_LABELS.practice,
+      count: 1,
+    })
+  })
+
+  it('returns no responses when theme and sentiment do not overlap', () => {
+    const filteredResponses = getFilteredResponses(insights.responses, {
+      themeFilter: 'pace',
+      sentimentFilter: 'positive',
+    })
+
+    expect(filteredResponses).toEqual([])
   })
 })

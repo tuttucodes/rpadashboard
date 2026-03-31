@@ -18,6 +18,20 @@ const { fetchSheetData, processData } = vi.hoisted(() => ({
       impression: row.impression ?? '',
     })),
     radarData: [],
+    qualitativeInsights: {
+      responses: rows.map((row) => ({
+        originalText: row.impression ?? '',
+        sourceField: 'impression',
+        sourceLabel: 'First impression',
+        studentName: row.name ?? 'Student 1',
+        reg: row.reg ?? '—',
+        themes: ['positive_experience'],
+        sentiment: 'positive',
+        severity: null,
+      })),
+      sentimentCounts: { positive: rows.length, neutral: 0, negative: 0 },
+      topThemes: [{ key: 'positive_experience', label: 'Positive experience', count: rows.length }],
+    },
   })),
 }))
 
@@ -50,7 +64,7 @@ vi.mock('./components/ChartsRow', () => ({
 }))
 
 vi.mock('./components/QualitativeSection', () => ({
-  default: () => <div>Qualitative</div>,
+  default: ({ insights }) => <div>Qualitative {insights.responses.length}</div>,
 }))
 
 vi.mock('./components/RespondentTable', () => ({
