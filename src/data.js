@@ -2,6 +2,7 @@ import Papa from 'papaparse'
 import { buildQualitativeInsights } from './qualitativeInsights'
 
 export const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRGT5Vgo1O48TlJE5xJgr1rv0OIdTdUtzTz1VWzf1AeD7L9qr_0bStrHLS7NBfbmWPMDHjZ5NSrmo1s/pub?gid=1133882812&single=true&output=csv'
+export const SHEET1_BCD_URL = 'https://docs.google.com/spreadsheets/d/118oLCcGMY6lg2206GWotB11MuR_UjbChF7LC_uYcIRc/gviz/tq?tqx=out:csv&sheet=Sheet1&range=B:D'
 export const DASHBOARD_CACHE_KEY = 'rpa-dashboard-live-cache'
 
 export const RATING_KEYS = [
@@ -31,6 +32,45 @@ export async function fetchSheetData() {
       header: true,
       skipEmptyLines: true,
       complete: (results) => resolve(results.data),
+      error: (err) => reject(err),
+    })
+  })
+}
+
+export async function fetchSheet1BCD() {
+  const res = await fetch(SHEET1_BCD_URL + `&t=${Date.now()}`)
+  if (!res.ok) throw new Error(`HTTP ${res.status}`)
+
+  const text = await res.text()
+
+  return new Promise((resolve, reject) => {
+    Papa.parse(text, {
+      skipEmptyLines: true,
+      complete: (results) => {
+        const rows = Array.isArray(results?.data) ? results.data : []
+        const [headerRow, ...bodyRows] = rows
+
+        const hasHeader = Array.isArray(headerRow) && headerRow.every(cell => typeof cell === 'string')
+        const headers = hasHeader ? headerRow : ['Column B', 'Column C', 'Column D']
+        const records = (hasHeader ? bodyRows : rows)
+          .filter(row => Array.isArray(row))
+          .map((row, index) => ({
+            id: index + 1,
+            colB: (row[0] ?? '').toString().trim(),
+            colC: (row[1] ?? '').toString().trim(),
+            colD: (row[2] ?? '').toString().trim(),
+          }))
+          .filter(row => row.colB || row.colC || row.colD)
+
+        resolve({
+          headers: {
+            colB: headers[0] || 'Column B',
+            colC: headers[1] || 'Column C',
+            colD: headers[2] || 'Column D',
+          },
+          rows: records,
+        })
+      },
       error: (err) => reject(err),
     })
   })

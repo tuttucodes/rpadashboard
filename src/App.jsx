@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback, useRef } from 'react'
 import {
   fetchSheetData,
+  fetchSheet1BCD,
   processData,
   FALLBACK_ROWS,
   loadCachedRows,
@@ -12,6 +13,7 @@ import RatingBars from './components/RatingBars'
 import ChartsRow from './components/ChartsRow'
 import QualitativeSection from './components/QualitativeSection'
 import RespondentTable from './components/RespondentTable'
+import Sheet1Table from './components/Sheet1Table'
 import Footer from './components/Footer'
 import styles from './App.module.css'
 
@@ -25,6 +27,8 @@ export default function App() {
   const [lastUpdated, setLastUpdated] = useState(null)
   const [usingFallback, setUsingFallback] = useState(false)
   const [staleData, setStaleData] = useState(false)
+  const [sheet1Data, setSheet1Data] = useState({ headers: null, rows: [] })
+  const [sheet1Error, setSheet1Error] = useState(null)
   const dataRef = useRef(null)
 
   useEffect(() => {
@@ -39,8 +43,10 @@ export default function App() {
     }
 
     try {
-      const rows = await fetchSheetData()
+      const [rows, sheet1] = await Promise.all([fetchSheetData(), fetchSheet1BCD()])
       setData(processData(rows))
+      setSheet1Data(sheet1)
+      setSheet1Error(null)
       setLastUpdated(new Date())
       setError(null)
       setStaleData(false)
@@ -65,6 +71,14 @@ export default function App() {
         }
       } else {
         setStaleData(true)
+      }
+
+      try {
+        const sheet1 = await fetchSheet1BCD()
+        setSheet1Data(sheet1)
+        setSheet1Error(null)
+      } catch (sheetErr) {
+        setSheet1Error(sheetErr.message)
       }
     } finally {
       setLoading(false)
@@ -129,6 +143,7 @@ export default function App() {
             <ChartsRow data={data} />
             <QualitativeSection students={data.students} insights={data.qualitativeInsights} />
             <RespondentTable students={data.students} />
+            <Sheet1Table headers={sheet1Data.headers} rows={sheet1Data.rows} hasError={Boolean(sheet1Error)} />
           </>
         ) : null}
 
